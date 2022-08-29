@@ -131,7 +131,7 @@ const close_button = `
 <button id="dndlive_chat_close_btn" style="height:1.7rem;width:1.75rem;position:absolute;right:5px;top:5px;background-color: inherit;border:none;outline:none;border-radius:3px;color:${instanceObject?.bannerColor};font-size:1.25rem;cursor:pointer;">&times;</button>`;
 
 // Search Question ==============================================
-const search = `<form id="dndhelplive-search-article" style="height:2.5rem;width:80%;margin:auto;margin-top:-1.25rem;oveflow:hidden;position:relative;" ><input style="height:100%;width:100%;outline:none;border:solid 1px #cbd5e1;border-radius:3px;padding:8px;padding-right:40px;color:#334155" id="dndhelpsearch name="dndhelpsearch" type="search" placeholder="Search for help" autocomplete="off"/>
+const search = `<form id="dndhelplive-search-article" style="height:2.5rem;width:80%;margin:auto;margin-top:-1.25rem;oveflow:hidden;position:relative;" ><input style="height:100%;width:100%;outline:none;border:solid 1px #cbd5e1;border-radius:3px;padding:8px;padding-right:40px;color:#334155" id="dndhelpsearch" name="dndhelpsearch" type="search" placeholder="Search for help" autocomplete="off"/>
 <button id="dndlive_search_article_btn" type="submit" style="position:absolute;right:5px;top:5px;height:1.9rem;width:2rem;border:none;border-radius:3px;background-color:${instanceObject?.button_color};color:${instanceObject?.button_text_color};cursor:pointer;">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-search" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -178,6 +178,24 @@ const expandedArticle_View = `<div id="dndhelpExpanded_Article" style="width:18.
 	</div>
 	</div>`;
 
+//No data found
+const no_data = `
+  <div
+    id="dndhelp_no_data"
+    style="height:fit-content;width:100%;display:none;flex-direction:column;justify-content:center;align-content:center;margin-top:1rem;"
+  >
+    <img
+      src="https://github.com/dndHelp-Desk/resources/blob/main/no_data_found.png?raw=true"
+      style="width:10rem;	object-position: center;object-fit: cover;margin:auto;"
+    />
+    <div
+      id="dndhelp_suggested_articles_header"
+      style="font-size:.9rem;font-weight: 400;letter-spacing: 0.03rem;color:#64748b;text-align: center;;width:100%;"
+    >
+      No results found
+    </div>
+  </div>`;
+
 // Start View ===================================================
 const startView = `<div id="dndhelp_startScreen" style="width:20rem;height:20rem;background:#f1f5f9;margin:auto;margin-top:-3rem;z-index:1;box-shadow: 0 10px 20px -15px rgba(0, 0, 0, 0.25);
 	drop-shadow: drop-shadow: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));border-bottom-right-radius: 0.3rem;border-bottom-left-radius: 0.3rem;border:solid 1px #e2e8f0;">
@@ -186,6 +204,7 @@ const startView = `<div id="dndhelp_startScreen" style="width:20rem;height:20rem
 	</div>
 	${search}
 	<div id="dndhelp_suggested_articles_header" style="font-size:.9rem;font-weight: 400;letter-spacing: 0.03rem;color:#64748b;padding:10px;padding-left:20px;padding-top:15px;">Suggested articles</div>
+  ${no_data}
 	${suggested}
 	</div>`;
 
@@ -312,32 +331,38 @@ document
   .getElementById("dndhelplive-search-article")
   ?.addEventListener("submit", (e) => {
     e.preventDefault();
-	let suggestedArticle = document.getElementsByClassName(
-    "dndhelp_article_list"
-  );
-  let suggestedArticleHeader = document.getElementById(
-    "dndhelp_suggested_articles_header"
-  );
-  //Hide Suggested 
-  suggestedArticleHeader.style.display = "none"
-  Array.prototype.forEach.call(suggestedArticle,(art)=>{
-	art.remove()
-  })
-  //Add Found Result
-  let results = [...articles]?.map((art) =>
-    art.name
-      ?.toLowerCase()
-      ?.replace(/\s/gi, "")
-      ?.includes(e.target.value?.toLowerCase()?.replace(/\s/g, ""))
-  );
-  results?.splice(0,5)?.forEach((article)=>{
-	document
-    .getElementById("dndhelp_suggested_articles_container")
-    ?.insertAdjacentHTML(
-      "beforeend",
-      `<div data-articleId="${article.id}" class="dndhelp_article_list" style="height:2.25rem;width:100%;border-bottom:solid 1px #cbd5e1;display:flex;align-items:center;font-size:0.9rem;color:#475569;white-space: nowrap;overflow:hidden;cursor:pointer;user-select: none;">${article.name}</div>`
+    let searchedValue = document.getElementById("dndhelpsearch");
+    let suggestedArticle = document.getElementsByClassName(
+      "dndhelp_article_list"
     );
-  })
+    let suggestedArticleHeader = document.getElementById(
+      "dndhelp_suggested_articles_header"
+    );
+    //Hide Suggested
+    suggestedArticleHeader.style.display = "none";
+    Array.prototype.forEach.call(suggestedArticle, (art) => {
+      art.style.display = "none";
+    });
+    //Add Found Result
+    let results = articles?.filter((art) =>
+      art.name
+        ?.toLowerCase()
+        ?.replace(/\s/gi, "")
+        ?.includes(searchedValue?.value?.toLowerCase()?.replace(/\s/gi, ""))
+    );
+    if (results.length >= 1) {
+      results?.forEach((article) => {
+        document
+          .getElementById("dndhelp_suggested_articles_container")
+          ?.insertAdjacentHTML(
+            "beforeend",
+            `<div data-articleId="${article.id}" class="dndhelp_article_list" style="height:2.25rem;width:100%;border-bottom:solid 1px #cbd5e1;display:flex;align-items:center;font-size:0.9rem;color:#475569;white-space: nowrap;overflow:hidden;cursor:pointer;user-select: none;">${article.name}</div>`
+          );
+      });
+      document.getElementById("dndhelp_no_data").style.display = "none";
+    } else if (results.length <= 0) {
+      document.getElementById("dndhelp_no_data").style.display = "flex";
+    }
   });
 
 //Expand Each Article
