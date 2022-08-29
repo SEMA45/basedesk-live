@@ -1,3 +1,5 @@
+import {} from "https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore.js";
+
 document.body.style.cssText = `
   margin:0px;
   padding:0px;
@@ -132,7 +134,7 @@ const close_button = `
 
 // Search Question ==============================================
 const search = `<form id="dndhelplive-search-article" style="height:2.5rem;width:80%;margin:auto;margin-top:-1.25rem;oveflow:hidden;position:relative;" ><input style="height:100%;width:100%;outline:none;border:solid 1px #cbd5e1;border-radius:3px;padding:8px;padding-right:40px;color:#334155" id="dndhelpsearch" name="dndhelpsearch" type="search" placeholder="Search for help" autocomplete="off"/>
-<button id="dndlive_search_article_btn" type="submit" style="position:absolute;right:5px;top:5px;height:1.9rem;width:2rem;border:none;border-radius:3px;background-color:${instanceObject?.button_color};color:${instanceObject?.button_text_color};cursor:pointer;">
+<button id="dndlive_search_article_btn" type="submit" style="position:absolute;right:5px;top:5px;height:1.9rem;width:2rem;border:none;border-radius:3px;background-color:${instanceObject?.button_color};color:${instanceObject?.button_text_color};cursor:pointer;diplay:flex;justify-content: center;align-items: center;">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-search" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
    <circle cx="15" cy="15" r="4"></circle>
@@ -153,15 +155,15 @@ const suggested = `
 //Expanded Article controlls (Back, Like and Dislike)
 const expandedArticle_Controls = `
 <div style="position:absolute;top:-1.25rem;height:2.25rem;width:18.7rem;background:transparent;display:flex;justify-content:space-between;align-items:center;">
-	<button id="dndhelp_close_article_btn" style="height:100%;width:4rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};font-size:0.8rem;cursor:pointer;">Back</button>
+	<button id="dndhelp_close_article_btn" style="height:100%;width:4rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};font-size:0.8rem;cursor:pointer;diplay:flex;justify-content: center;align-items: center;">Back</button>
 	<div style="display:flex;justify-content:space-between;align-items:center;height:100%;width:5.5rem;gap:3px;">
-	<button id="dndhelp_like_article_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;">
+	<button id="dndhelp_like_article_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;diplay:flex;justify-content: center;align-items: center;">
 	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-thumb-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
    <path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"></path>
 </svg>
 	</button>
-	<button id="dndhelp_dislike_article_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;">
+	<button id="dndhelp_dislike_article_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;diplay:flex;justify-content: center;align-items: center;">
 	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-thumb-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
    <path d="M7 13v-8a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v7a1 1 0 0 0 1 1h3a4 4 0 0 1 4 4v1a2 2 0 0 0 4 0v-5h3a2 2 0 0 0 2 -2l-1 -5a2 3 0 0 0 -2 -2h-7a3 3 0 0 0 -3 3"></path>
@@ -219,12 +221,33 @@ const contactUsBtn = `<button id="dndhelp_contactUs_Btn" style="width:20rem;heig
 </svg>
 </button>`;
 
+//Expanded Article controlls (Back, Like and Dislike)
+const chatOptions_Controls = `
+<div style="position:absolute;top:-1.25rem;height:2.25rem;width:18.7rem;margin-left:1rem;background:transparent;display:flex;justify-content:space-between;align-items:center;">
+	<button id="dndhelp_close_chat_btn" style="height:100%;width:4rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};font-size:0.8rem;cursor:pointer;diplay:flex;justify-content: center;align-items: center;">Back</button>
+	<div style="display:flex;justify-content:space-between;align-items:center;height:100%;width:5.5rem;gap:3px;">
+	<button id="dndhelp_like_chat_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;diplay:flex;justify-content: center;align-items: center;">
+	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-thumb-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3"></path>
+</svg>
+	</button>
+	<button id="dndhelp_dislike_chat_btn" style="height:100%;width:2.5rem;background-color:#fff;border:none;border-radius:3px;color:${instanceObject?.background_color};cursor:pointer;diplay:flex;justify-content: center;align-items: center;">
+	<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-thumb-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M7 13v-8a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v7a1 1 0 0 0 1 1h3a4 4 0 0 1 4 4v1a2 2 0 0 0 4 0v-5h3a2 2 0 0 0 2 -2l-1 -5a2 3 0 0 0 -2 -2h-7a3 3 0 0 0 -3 3"></path>
+</svg>
+</button></div></div>
+`;
+
 // Contact Us View Options ===================================================
 const contactUs_View_Options = `
-<div id="dndhelp_contactUs_View_Options" style="width:90%;heightt:20rem;z-index:2;background:#f1f5f9;box-shadow: 0 10px 20px -15px rgba(0, 0, 0, 0.25);border-radius:5px;border:solid 1px #e2e8f0;display:flex;flex-direction:column;"></div>`;
+<div id="dndhelp_contactUs_View_Options" style="width:90%;height:28rem;margin:auto;margin-top:-7rem;z-index:3;background:#f1f5f9;box-shadow: 0 10px 20px -15px rgba(0, 0, 0, 0.25);border-radius:5px;border:solid 1px #e2e8f0;display:flex;flex-direction:column;position:relative;">
+${chatOptions_Controls}
+</div>`;
 
 //Start Widget Container ==============================================
-const dndlive_startScreenComponent = `<div id="dndlive_startScreenComponent" style="height: 33rem;width:23rem;
+const dndhelpComponents_Container = `<div id="dndhelpComponents_Container" style="height: 33rem;width:23rem;
 	overflow:hidden;
 	margin-top:0;
 	display:flex;
@@ -235,13 +258,14 @@ const dndlive_startScreenComponent = `<div id="dndlive_startScreenComponent" sty
 	">
 	<div style="width:100%;height:10rem;display:flex;background:${instanceObject?.background_color};position:relative;top:0;">
 	${close_button}
-	<h1 style="font-size:1.5rem;font-weight:500;color:${instanceObject?.bannerColor};padding:10px;padding-left:25px;margin-top:30px;">${instanceObject?.bannerMessage}</h1>
+	<h1 id="dndhelp_banner" style="font-size:1.5rem;font-weight:500;color:${instanceObject?.bannerColor};padding:10px;padding-left:25px;margin-top:30px;">${instanceObject?.bannerMessage}</h1>
 	</div>
-	<div id="dndhelp_home_container" style="width:100%;heightt:fit-content;z-index:2;gap:12px;display:flex;flex-direction:column;">
+	<div id="dndhelp_home_container" style="width:100%;height:fit-content;z-index:2;gap:12px;display:none;flex-direction:column;">
 	${startView}
 	${expandedArticle_View}
 	${contactUsBtn}
 	</div>
+  ${contactUs_View_Options}
 	</div>`;
 
 //Widget Container ==============================================
@@ -255,11 +279,11 @@ const widgetContainer = `
 	position: fixed; 
 	${instanceObject?.position}: 0.5rem; 
 	bottom: 1rem; 
-	transition-property: all; z-index: 99999;background:transparent;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;transition-property: all;
+	transition-property: all; z-index: 99999;background:transparent;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 	"> 
-	${dndlive_startScreenComponent}
+	${dndhelpComponents_Container}
 	${start_button}
 	</div>`;
 
@@ -275,7 +299,7 @@ document.body.insertAdjacentHTML("beforeend", widgetContainer);
 const openBtn = document.getElementById("dndlive_chat_start_btn");
 const closeBtn = document.getElementById("dndlive_chat_close_btn");
 const widgetStartScreen = document.getElementById(
-  "dndlive_startScreenComponent"
+  "dndhelpComponents_Container"
 );
 
 //Close and Open Function
@@ -388,3 +412,23 @@ document.addEventListener("click", (e) => {
     expandedArticleContainer.style.display = "none";
   }
 });
+
+//Contact Functions
+document
+  .getElementById("dndhelp_contactUs_Btn")
+  .addEventListener("click", () => {
+    document.getElementById("dndhelp_home_container").style.display = "none";
+    document.getElementById("dndhelp_banner").style.display = "none";
+    document.getElementById("dndhelp_contactUs_View_Options").style.display =
+      "flex";
+  });
+
+//Chat Back Button and Likes
+document
+  .getElementById("dndhelp_close_chat_btn")
+  .addEventListener("click", () => {
+    document.getElementById("dndhelp_home_container").style.display = "flex";
+    document.getElementById("dndhelp_banner").style.display = "flex";
+    document.getElementById("dndhelp_contactUs_View_Options").style.display =
+      "none";
+  });
